@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.EvidencijaRadMapperB">
+
+	<insert id="createEvidencijaRad" parameterType="hr.tvz.hrsustav.entity.EvidencijaRad" useGeneratedKeys="true" keyProperty="idEvidencijaRad">
+		INSERT INTO evidencija_rad (
+			radnik_fk, datum, pocetak, kraj, ukupno_redovno, redovno, prekovr,
+			zastoj, strajk, lockout, prerasp, bol_do_42, bol_od_42, godisnji,
+			godisnji_placen, praznik, ukupno_sati, nedjelja_pov, praznik_pov,
+			noc_pov, smjena_pov, dvokr_pov, ostalo_pov, pripr, odmor, odsut
+		) VALUES (
+			#{radnikFk}, #{datum}, #{pocetak}, #{kraj}, #{ukupnoRedovno}, #{redovno}, #{prekovr},
+			#{zastoj}, #{strajk}, #{lockout}, #{prerasp}, #{bolDo42}, #{bolOd42}, #{godisnji},
+			#{godisnjiPlacen}, #{praznik}, #{ukupnoSati}, #{nedjeljaPov}, #{praznikPov},
+			#{nocPov}, #{smjenaPov}, #{dvokrPov}, #{ostaloPov}, #{pripr}, #{odmor}, #{odsut}
+		)
+	</insert>
+
+	<select id="getEvidencijaRad" resultType="hr.tvz.hrsustav.entity.EvidencijaRad">
+		SELECT
+			*
+		FROM evidencija_rad
+		WHERE 
+			radnik_fk = #{radnikFk}
+			AND datum BETWEEN #{datumStart} AND #{datumEnd}
+	</select>
+
+	<update id="updateEvidencijaRad" parameterType="hr.tvz.hrsustav.entity.EvidencijaRad">
+		UPDATE evidencija_rad SET
+			radnik_fk = #{radnikFk},
+			datum = #{datum},
+			pocetak = #{pocetak},
+			kraj = #{kraj},
+			ukupno_redovno = #{ukupnoRedovno},
+			redovno = #{redovno},
+			prekovr = #{prekovr},
+			zastoj = #{zastoj},
+			strajk = #{strajk},
+			lockout = #{lockout},
+			prerasp = #{prerasp},
+			bol_do_42 = #{bolDo42},
+			bol_od_42 = #{bolOd42},
+			godisnji = #{godisnji},
+			godisnji_placen = #{godisnjiPlacen},
+			praznik = #{praznik},
+			ukupno_sati = #{ukupnoSati},
+			nedjelja_pov = #{nedjeljaPov},
+			praznik_pov = #{praznikPov},
+			noc_pov = #{nocPov},
+			smjena_pov = #{smjenaPov},
+			dvokr_pov = #{dvokrPov},
+			ostalo_pov = #{ostaloPov},
+			pripr = #{pripr},
+			odmor = #{odmor},
+			odsut = #{odsut}
+		WHERE id_evidencija_rad = #{idEvidencijaRad}
+	</update>
+
+	<delete id="deleteEvidencijaRad" parameterType="int">
+		DELETE FROM evidencija_rad 
+		WHERE 
+			id_evidencija_rad = #{idEvidencijaRad}
+	</delete>
+
+</mapper>

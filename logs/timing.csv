@@ -1,0 +1,5 @@
+profile,uri,method,duration
+[hibernate],/api/evidencija-snimka,GET,116559700
+[raw],/api/evidencija-snimka,GET,36756900
+[raw],/api/evidencija-snimka,GET,149518800
+[mybatis],/api/evidencija-snimka,GET,143936900

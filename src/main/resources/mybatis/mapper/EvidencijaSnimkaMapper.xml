@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.EvidencijaSnimkaMapperB">
+
+	<insert id="createEvidencijaSnimka" parameterType="hr.tvz.hrsustav.dto.request.EvidencijaSnimkaRequest" useGeneratedKeys="true" keyProperty="idEvidencijaSnimka">
+		INSERT INTO evidencija_snimka (
+			datum_od,
+			datum_do,
+			radnik_fk,
+			snimka,
+			datum)
+		VALUES (
+			#{datumOd},
+			#{datumDo},
+			#{radnikFk},
+			#{snimka},
+			CURRENT_TIMESTAMP)
+	</insert>
+
+	<select id="getEvidencijaSnimka" resultType="hr.tvz.hrsustav.dto.EvidencijaSnimkaDto" parameterType="hr.tvz.hrsustav.dto.request.EvidencijaSnimkaRequest">
+		SELECT
+			id_evidencija_snimka,
+			datum_od,
+			datum_do,
+			radnik_fk,
+			snimka,
+			datum
+		FROM evidencija_snimka
+		<where>
+			<if test="idEvidencijaSnimka != null">
+				AND id_evidencija_snimka = #{idEvidencijaSnimka}
+			</if>
+			<if test="radnikFk != null">
+				AND radnik_fk = #{radnikFk}
+			</if>
+			<if test="datumOd != null">
+				AND datum_od = #{datumOd}
+			</if>
+			<if test="datumDo != null">
+				AND datum_do = #{datumDo}
+			</if>
+			<if test="datum != null">
+				AND datum = #{datum}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateEvidencijaSnimka" parameterType="hr.tvz.hrsustav.dto.request.EvidencijaSnimkaRequest">
+		UPDATE evidencija_snimka
+		SET
+			datum_od = #{datumOd},
+			datum_do = #{datumDo},
+			radnik_fk = #{radnikFk},
+			snimka = #{snimka},
+			datum = CURRENT_TIMESTAMP
+		WHERE
+			id_evidencija_snimka = #{idEvidencijaSnimka}
+	</update>
+
+	<delete id="deleteEvidencijaSnimka" parameterType="int">
+		DELETE FROM evidencija_snimka 
+		WHERE 
+			id_evidencija_snimka = #{id}
+	</delete>
+
+</mapper>

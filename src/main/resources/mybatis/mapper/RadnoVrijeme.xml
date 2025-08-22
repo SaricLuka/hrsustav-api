@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.RadnoVrijemeMapperB">
+
+	<insert id="createRadnoVrijme" parameterType="hr.tvz.hrsustav.entity.UgovorRad" useGeneratedKeys="true" keyProperty="radnoVrijemeFk.idRadnoVrijeme">
+		INSERT INTO radno_vrijeme (
+			vrsta_radno_vrijeme_fk,
+			tjedno_sati,
+			dnevno_sati,
+			godisnji
+		) VALUES (
+			#{radnoVrijemeFk.vrstaRadnoVrijemeFk},
+			#{radnoVrijemeFk.tjednoSati},
+			#{radnoVrijemeFk.dnevnoSati},
+			#{radnoVrijemeFk.godisnji}
+		)
+	</insert>
+
+	<update id="updateRadnoVrijeme" parameterType="hr.tvz.hrsustav.entity.UgovorRad">
+		UPDATE radno_vrijeme
+		SET
+			vrsta_radno_vrijeme_fk = #{radnoVrijemeFk.vrstaRadnoVrijemeFk},
+			tjedno_sati = #{radnoVrijemeFk.tjednoSati},
+			dnevno_sati = #{radnoVrijemeFk.dnevnoSati},
+			godisnji = #{radnoVrijemeFk.godisnji}
+		WHERE id_radno_vrijeme = #{radnoVrijemeFk.idRadnoVrijeme}
+	</update>
+
+</mapper>

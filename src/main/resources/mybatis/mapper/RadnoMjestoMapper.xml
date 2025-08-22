@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.RadnoMjestoMapperB">
+
+	<insert id="createRadnoMjesto" parameterType="hr.tvz.hrsustav.entity.RadnoMjesto" useGeneratedKeys="true" keyProperty="idRadnoMjesto">
+		INSERT INTO radno_mjesto 
+			(naziv)
+		VALUES 
+			(#{naziv})
+	</insert>
+
+	<select id="getAllRadnoMjesto" resultType="hr.tvz.hrsustav.entity.RadnoMjesto">
+		SELECT
+			id_radno_mjesto,
+			naziv
+		FROM radno_mjesto 
+	</select>
+
+	<update id="updateRadnoMjesto" parameterType="hr.tvz.hrsustav.entity.RadnoMjesto">
+		UPDATE radno_mjesto 
+		SET 
+			naziv = #{naziv}
+		WHERE
+			id_radno_mjesto = #{idRadnoMjesto}
+	</update>
+
+	<delete id="deleteRadnoMjesto" parameterType="int">
+		DELETE FROM radno_mjesto 
+		WHERE
+			id_radno_mjesto = #{id}
+	</delete>
+
+</mapper>

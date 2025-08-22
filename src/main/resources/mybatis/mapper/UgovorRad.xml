@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.UgovorRadMapperB">
+
+	<insert id="createUgovorRad" parameterType="hr.tvz.hrsustav.entity.UgovorRad" useGeneratedKeys="true" keyProperty="idUgovorRad">
+		INSERT INTO ugovor_rad (
+			radnik_fk, 
+			datum_ugovor, 
+			datum_od, 
+			datum_do,
+			mjesto_rada_fk, 
+			radno_mjesto_fk, 
+			radno_vrijeme_fk,
+			vrsta_ugovor_rad_fk, 
+			bruto_placa
+		) VALUES (
+			#{radnikFk}, 
+			#{datumUgovor}, 
+			#{datumOd}, 
+			#{datumDo},
+			#{mjestoRadaFk}, 
+			#{radnoMjestoFk}, 
+			#{radnoVrijemeFk.idRadnoVrijeme},
+			#{vrstaUgovorRadFk}, 
+			#{brutoPlaca}
+		);
+	</insert>
+
+	<select id="getAllUgovorRad" resultType="hr.tvz.hrsustav.dto.UgovorRadDto" parameterType="hr.tvz.hrsustav.dto.request.UgovorRadGetRequest">
+		SELECT
+			u.id_ugovor_rad,
+			u.radnik_fk,
+			u.datum_ugovor,
+			u.datum_od,
+			u.datum_do,
+			u.mjesto_rada_fk,
+			u.radno_mjesto_fk,
+			u.radno_vrijeme_fk,
+			rv.vrsta_radno_vrijeme_fk,
+			rv.tjedno_sati,
+			rv.dnevno_sati,
+			rv.godisnji,
+			u.vrsta_ugovor_rad_fk,
+			u.bruto_placa
+		FROM ugovor_rad u
+		LEFT JOIN radno_vrijeme rv 
+			ON u.radno_vrijeme_fk = rv.id_radno_vrijeme
+		<where>
+				<if test="idUgovorRad != null">
+					AND u.id_ugovor_rad = #{idUgovorRad}
+				</if>
+		
+				<if test="radnikFk != null">
+					AND u.radnik_fk = #{radnikFk}
+				</if>
+		
+				<choose>
+					<when test="datumUgovorFrom != null and datumUgovorTo != null">
+						AND u.datum_ugovor BETWEEN #{datumUgovorFrom} AND #{datumUgovorTo}
+					</when>
+					<when test="datumUgovorFrom != null">
+						AND u.datum_ugovor &gt;= #{datumUgovorFrom}
+					</when>
+					<when test="datumUgovorTo != null">
+						AND u.datum_ugovor &lt;= #{datumUgovorTo}
+					</when>
+				</choose>
+		
+				<choose>
+					<when test="datumFrom != null and datumTo != null">
+						AND #{datumFrom} &lt;= u.datum_od
+						AND #{datumTo} &lt;= u.datum_do
+					</when>
+					<when test="datumFrom != null">
+						AND #{datumFrom} &lt;= u.datum_od
+					</when>
+					<when test="datumTo != null">
+						AND #{datumTo} &lt;= u.datum_do
+					</when>
+				</choose>
+		
+				<if test="radnoMjestoFk != null">
+					AND u.radno_mjesto_fk = #{radnoMjestoFk}
+				</if>
+		</where>
+	</select>
+
+	<update id="updateUgovorRad" parameterType="hr.tvz.hrsustav.entity.UgovorRad">
+		UPDATE ugovor_rad SET
+			radnik_fk = #{radnikFk},
+			datum_ugovor = #{datumUgovor},
+			datum_od = #{datumOd},
+			datum_do = #{datumDo},
+			mjesto_rada_fk = #{mjestoRadaFk},
+			radno_mjesto_fk = #{radnoMjestoFk},
+			vrsta_ugovor_rad_fk = #{vrstaUgovorRadFk},
+			bruto_placa = #{brutoPlaca}
+		WHERE id_ugovor_rad = #{idUgovorRad}
+	</update>
+
+	<delete id="deleteUgovorRad" parameterType="int">
+		DELETE FROM radno_vrijeme
+		WHERE id_radno_vrijeme = (
+			SELECT radno_vrijeme_fk FROM ugovor_rad WHERE id_ugovor_rad = #{idUgovorRad}
+		);
+	</delete>
+
+</mapper>

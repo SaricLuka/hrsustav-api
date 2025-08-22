@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.MjestoMapperB">
+
+	<resultMap id="mjestoWithDrzavaResultMap" type="hr.tvz.hrsustav.entity.Mjesto">
+		<id property="idMjesto" column="id_mjesto"/>
+		<result property="naziv" column="naziv"/>
+		<result property="postBr" column="post_br"/>
+
+		<association property="drzavaFk" javaType="hr.tvz.hrsustav.entity.Drzava">
+			<id property="idDrzava" column="id_drzava"/>
+			<result property="naziv" column="drzava_naziv"/>
+			<result property="oznaka" column="drzava_oznaka"/>
+		</association>
+	</resultMap>
+
+	<select id="getAllMjesto" resultMap="mjestoWithDrzavaResultMap">
+		SELECT 
+			m.id_mjesto,
+			m.naziv,
+			m.post_br,
+			d.id_drzava,
+			d.naziv AS drzava_naziv,
+			d.oznaka AS drzava_oznaka
+		FROM mjesto m
+			JOIN drzava d ON m.drzava_fk = d.id_drzava
+	</select>
+
+</mapper>

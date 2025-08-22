@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.RadnikPrebivalisteMapperB">
+
+	<select id="getNextIds" resultType="java.lang.Integer" parameterType="int">
+		SELECT nextval('radnik_prebivaliste_seq') FROM generate_series(1, #{count})
+	</select>
+
+	<insert id="createRadnikPrebivaliste" parameterType="list">
+		INSERT INTO radnik_prebivaliste (
+			id_radnik_prebivaliste,
+			radnik_fk,
+			mjesto_fk,
+			ulica,
+			kucni_br
+		) VALUES
+		<foreach collection="list" item="i" separator=",">
+			(#{i.idRadnikPrebivaliste}, #{i.radnikFk}, #{i.mjestoFk}, #{i.ulica}, #{i.kucniBr})
+		</foreach>
+	</insert>
+
+	<select id="getRadnikPrebivalisteByRadnik" resultType="hr.tvz.hrsustav.entity.RadnikPrebivaliste">
+		SELECT
+			id_radnik_prebivaliste,
+			radnik_fk,
+			mjesto_fk,
+			ulica,
+			kucni_br
+		FROM radnik_prebivaliste
+		WHERE radnik_fk = #{radnikFk}
+	</select>
+
+	<select id="getRadnikPrebivalisteByMjesto" resultType="hr.tvz.hrsustav.entity.RadnikPrebivaliste">
+		SELECT
+			id_radnik_prebivaliste,
+			radnik_fk,
+			mjesto_fk,
+			ulica,
+			kucni_br
+		FROM radnik_prebivaliste
+		WHERE mjesto_fk = #{mjestoFk}
+	</select>
+
+	<update id="updateRadnikPrebivaliste" parameterType="hr.tvz.hrsustav.entity.RadnikPrebivaliste">
+ 		UPDATE radnik_prebivaliste
+		SET
+			radnik_fk = #{radnikFk},
+			mjesto_fk = #{mjestoFk},
+			ulica = #{ulica},
+			kucni_br = #{kucniBr}
+		WHERE id_radnik_prebivaliste = #{idRadnikPrebivaliste}
+	</update>
+
+	<delete id="deleteRadnikPrebivaliste" parameterType="int">
+		DELETE FROM radnik_prebivaliste
+			WHERE id_radnik_prebivaliste = #{idRadnikPrebivaliste}
+	</delete>
+
+</mapper>

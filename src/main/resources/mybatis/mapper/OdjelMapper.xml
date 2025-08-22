@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.OdjelMapperB">
+
+	<insert id="createOdjel" parameterType="hr.tvz.hrsustav.entity.Odjel" useGeneratedKeys="true" keyProperty="idOdjel">
+		INSERT INTO odjel 
+			(naziv)
+		VALUES 
+			(#{naziv})
+	</insert>
+
+	<select id="getAllOdjel" resultType="hr.tvz.hrsustav.entity.Odjel">
+		SELECT
+			id_odjel,
+			naziv
+		FROM odjel
+	</select>
+
+	<update id="updateOdjel" parameterType="hr.tvz.hrsustav.entity.Odjel">
+		UPDATE odjel 
+		SET 
+			naziv = #{naziv}
+		WHERE 
+			id_odjel = #{idOdjel}
+	</update>
+
+	<delete id="deleteOdjel" parameterType="int">
+		DELETE FROM odjel 
+		WHERE 
+			id_odjel = #{id}
+	</delete>
+
+</mapper>

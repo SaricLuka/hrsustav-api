@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.VrstaUgovorRadMapperB">
+
+	<select id="getAllVrstaUgovorRad" resultType="hr.tvz.hrsustav.entity.VrstaUgovorRad">
+		SELECT
+			id_vrsta_ugovor_rad,
+			naziv
+		FROM vrsta_ugovor_rad
+	</select>
+
+</mapper>

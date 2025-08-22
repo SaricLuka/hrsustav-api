@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.RadnikMapperB">
+
+	<insert id="createRadnik" parameterType="hr.tvz.hrsustav.dto.request.RadnikRequest" useGeneratedKeys="true" keyProperty="idRadnik">
+			INSERT INTO radnik (
+				radnik_nadred_fk,
+				ime,
+				prezime,
+				oib,
+				spol_fk,
+				datum_rod,
+				radnik_vrsta_fk)
+			VALUES (
+				#{radnikNadredFk},
+				#{ime},
+				#{prezime},
+				#{oib},
+				#{spolFk},
+				#{datumRod},
+				#{radnikVrstaFk})
+	</insert>
+
+<select id="getAllRadnik" resultType="hr.tvz.hrsustav.dto.RadnikDto" parameterType="hr.tvz.hrsustav.dto.request.RadnikGetRequest">
+	SELECT DISTINCT ON (r.id_radnik)
+		r.id_radnik,
+		r.radnik_nadred_fk,
+		r.ime,
+		r.prezime,
+		r.oib,
+		s.oznaka AS spol,
+		r.datum_rod,
+		rv.naziv AS radnikVrstaNaziv,
+		ro.odjel_fk,
+		ur.id_ugovor_rad,
+		ur.datum_od AS datumOdUgovorRad,
+		ro.datum_od AS datumOdRadnikOdjel
+	FROM radnik r
+		LEFT JOIN spol s ON s.id_spol = r.spol_fk
+		LEFT JOIN radnik_vrsta rv ON rv.id_radnik_vrsta = r.radnik_vrsta_fk
+		LEFT JOIN radnik_odjel ro ON ro.radnik_fk = r.id_radnik
+		LEFT JOIN ugovor_rad ur ON ur.radnik_fk = r.id_radnik
+	<where>
+		<if test="idRadnik != null">
+			AND r.id_radnik = #{idRadnik}
+		</if>
+		<if test="radnikNadredFk != null">
+			AND r.radnik_nadred_fk = #{radnikNadredFk}
+		</if>
+		<if test="ime != null">
+			AND r.ime = #{ime}
+		</if>
+		<if test="prezime != null">
+			AND r.prezime = #{prezime}
+		</if>
+		<if test="oib != null">
+			AND r.oib = #{oib}
+		</if>
+		<if test="spolFk != null">
+			AND r.spol_fk = #{spolFk}
+		</if>
+		<if test="datumRod != null">
+			AND r.datum_rod = #{datumRod}
+		</if>
+		<if test="radnikVrstaFk != null">
+			AND r.radnik_vrsta_fk = #{radnikVrstaFk}
+		</if>
+		<if test="inOdjel == true">
+			AND ro.datum_od <![CDATA[<=]]> CURRENT_DATE
+			AND (datum_do <![CDATA[>=]]> CURRENT_DATE OR datum_do IS NULL)
+		</if>
+		<if test="isZaposlen == true">
+			AND ur.datum_od <![CDATA[<=]]> CURRENT_DATE
+			AND (ur.datum_do IS NULL OR ur.datum_do <![CDATA[>=]]> CURRENT_DATE)
+		</if>
+	</where>
+	ORDER BY
+		r.id_radnik,
+		ro.datum_od DESC,
+		ur.datum_od DESC;
+</select>
+
+	<update id="updateRadnik" parameterType="hr.tvz.hrsustav.dto.request.RadnikRequest">
+		UPDATE radnik
+		SET 
+			radnik_nadred_fk = #{radnikNadredFk},
+			ime = #{ime},
+			prezime = #{prezime},
+			oib = #{oib},
+			spol_fk = #{spolFk},
+			datum_rod = #{datumRod},
+			radnik_vrsta_fk = #{radnikVrstaFk}
+		WHERE 
+			id_radnik = #{idRadnik} 
+	</update>
+
+	<delete id="deleteRadnik" parameterType="int">
+		DELETE FROM radnik
+		WHERE 
+			id_radnik = #{idRadnik}
+	</delete>
+
+</mapper>

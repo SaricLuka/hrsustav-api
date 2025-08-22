@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.tvz.hrsustav.mybatis.mapper.RadnikOdjelMapperB">
+
+	<insert id="createRadnikOdjel" parameterType="hr.tvz.hrsustav.dto.request.RadnikOdjelRequest" useGeneratedKeys="true" keyProperty="idRadnikOdjel">
+			INSERT INTO radnik_odjel (
+				radnik_fk,
+				odjel_fk,
+				datum_od,
+				datum_do)
+			VALUES (
+				#{radnikFk},
+				#{odjelFk},
+				#{datumOd},
+				#{datumDo})
+	</insert>
+
+	<select id="getRadnikOdjelByRadnik" resultType="hr.tvz.hrsustav.dto.RadnikOdjelDto">
+		SELECT
+			id_radnik_odjel,
+			radnik_fk,
+			o.naziv AS naziv_odjela,
+			datum_od,
+			datum_do
+		FROM radnik_odjel
+			INNER JOIN odjel o ON o.id_odjel = radnik_odjel.odjel_fk
+		WHERE 
+			radnik_fk = #{radnikFk}
+	</select>
+
+	<select id="getRadnikOdjelByOdjel" resultType="hr.tvz.hrsustav.dto.RadnikOdjelDto">
+		SELECT
+			id_radnik_odjel,
+			radnik_fk,
+			o.naziv AS naziv_odjela,
+			datum_od,
+			datum_do
+		FROM radnik_odjel
+			INNER JOIN odjel o ON o.id_odjel = radnik_odjel.odjel_fk
+		WHERE 
+			odjel_fk = #{odjelFk}
+	</select>
+
+	<update id="updateRadnikOdjel" parameterType="hr.tvz.hrsustav.dto.request.RadnikOdjelRequest">
+		UPDATE radnik_odjel
+		SET
+			radnik_fk = #{radnikFk},
+			odjel_fk = #{odjelFk},
+			datum_od = #{datumOd},
+			datum_do = #{datumDo}
+		WHERE 
+			id_radnik_odjel = #{idRadnikOdjel}
+	</update>
+
+	<delete id="deleteRadnikOdjel" parameterType="int">
+		DELETE from radnik_odjel
+		WHERE 
+			id_radnik_odjel = #{idRadnikOdjel}
+	</delete>
+
+</mapper>
